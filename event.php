@@ -8,6 +8,13 @@ $userIDSession = $_SESSION["user_id"];
 $query = "SELECT * FROM event order BY eventDate";
 $result = mysqli_query($conn,$query);
 
+if(isset($_POST['search'])){
+  $date1 = ($_POST['dateFrom']);
+  $date2 = ($_POST['dateTo']);
+  $query = "SELECT * FROM event WHERE eventDate BETWEEN '$date1' AND '$date2' ORDER BY eventDate";
+  $result = mysqli_query($conn,$query);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -196,6 +203,20 @@ $result = mysqli_query($conn,$query);
         <table class="table table-striped table-bordered" style="text-align: center;">
           <thead>
             <tr>
+              <td colspan="9">
+                <form method="POST">
+                 <div class="wrap">
+                 <div class="search">
+                    SEARCH EVENT BY DATE RANGE <input type="date" name="dateFrom" class="searchTerm" required="required"> TO <input type="date" name="dateTo" class="searchTerm" required="required">
+                    <button type="submit" name="search" class="searchButton">
+                      <i class="fa fa-search"></i>
+                   </button>
+                 </div>
+              </div>
+                </form>
+              </td>
+            </tr>
+            <tr>
               <th scope="col">No</th>
               <th scope="col">Event Name</th>
               <th scope="col">Event Date</th>
@@ -217,7 +238,7 @@ $result = mysqli_query($conn,$query);
                 </tr>
               <?php $i++;}}else{?>
                 <tr>
-                  <td scope="row" colspan="5">No event</td>
+                  <td scope="row" colspan="9">No event</td>
                 </tr>
               <?php } ?>
             </tbody>
