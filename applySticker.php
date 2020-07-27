@@ -3,6 +3,7 @@ session_start();
 ob_start();
 include_once('DBCon.php');
 include_once('query/applyStickerQuery.php');
+include_once('query/deleteSticker.php');
 
 $userIDSession = $_SESSION["user_id"];
 
@@ -251,6 +252,7 @@ $result = mysqli_query($conn,$query);
               <th scope="col">Vehicle Type</th>
               <th scope="col">Status</th>
               <th scope="col">Vehicle Grant</th>
+              <th scope="col">Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -272,13 +274,21 @@ $result = mysqli_query($conn,$query);
                   <td scope="row"><span class="badge badge-success"><?php echo $row['status']; ?></span></td>
                   <?php } ?>
                   <td scope="row"><img width="200px" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($vehicleGrant); ?>"/></td>
+                  <?php if ($row['status'] === 'NOT VERIFIED') { ?>
+                  <td scope="row"><input type='checkbox' name='deleteData[]' value='<?= $stickerID ?>'></td>
+                  <?php } else { ?>
+                  <td scope="row"><input type='checkbox' name='deleteData[]' value='<?= $stickerID ?>' disabled="disabled"></td>
+                  <?php } ?>
                 </tr>
               <?php $i++;}}else{?>
                 <tr>
-                  <td scope="row" colspan="7">No sticker application yet</td>
+                  <td scope="row" colspan="8">No sticker application yet</td>
                 </tr>
               <?php } ?>
               <tr>
+                <th scope="row" colspan="8">
+                  <button type="submit" name="delete" class="btn btn-danger">Delete Row(s)</button>
+                </th>
               </tr>
             </tbody>
           </table>
