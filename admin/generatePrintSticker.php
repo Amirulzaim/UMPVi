@@ -217,6 +217,7 @@ $result = mysqli_query($conn,$query);
               <th scope="col">Status</th>
               <th scope="col">Vehicle Grant</th>
               <th scope="col">User Type</th>
+              <th scope="col">Print Sticker</th>
             </tr>
           </thead>
                     <tbody>
@@ -235,7 +236,10 @@ $result = mysqli_query($conn,$query);
                   <td scope="row"><?php echo $row['vehicleColor']; ?></td>
                   <td scope="row"><span class="badge badge-success"><?php echo $row['status']; ?></span></td>
                   <td scope="row"><img width="200px" src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($vehicleGrant); ?>" /></td>
-                  <td scope="row"><?php echo $row['userType']; ?></td>          
+                  <td scope="row"><?php echo $row['userType']; ?></td>
+                  <td scope="row"><a href="printSticker.php?id=<?=$row['userID']?>" target="_BLANK"><button type="button" name="verify" class="btn btn-success" value='<?= $userID ?>'>PRINT</button></a></td>
+                  
+                  
                 </tr>
               <?php $i++;}} ?>
               <tr>
