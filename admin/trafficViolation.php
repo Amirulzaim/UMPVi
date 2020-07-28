@@ -7,15 +7,19 @@ $_SESSION["username"];
 
 $result=mysqli_query($conn,"SELECT count(*) as total from trafficviolation WHERE penaltyID = '1'");
 $data=mysqli_fetch_assoc($result);
+$accident = $data['total'];
 
 $result=mysqli_query($conn,"SELECT count(*) as total from trafficviolation WHERE penaltyID = '2'");
 $data=mysqli_fetch_assoc($result);
+$parking = $data['total'];
 
 $result=mysqli_query($conn,"SELECT count(*) as total from trafficviolation WHERE penaltyID = '3'");
 $data=mysqli_fetch_assoc($result);
+$sticker = $data['total'];
 
 $result=mysqli_query($conn,"SELECT count(*) as total from trafficviolation WHERE penaltyID = '4'");
 $data=mysqli_fetch_assoc($result);
+$helmet = $data['total'];
 
 $query = "SELECT * FROM penalty";
 $result = mysqli_query($conn,$query);
@@ -238,6 +242,39 @@ $result = mysqli_query($conn,$query);
       </table>
     </form>
 
+    <div id="piechart"></div>
+
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="../index.php">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Bootstrap core JavaScript-->
   <script src="../vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -261,6 +298,39 @@ $result = mysqli_query($conn,$query);
   <script type="text/javascript" src="../QrScan/js/qrcodelib.js"></script>
   <script type="text/javascript" src="../QrScan/js/webcodecamjs.js"></script>
   <script type="text/javascript" src="../QrScan/js/main.js"></script>
+
+
+<!-- Pie Chart Script -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <script type="text/javascript">
+  // Load google charts
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+
+  // Draw the chart and set the chart values
+  function drawChart() {
+
+    var accident = <?php echo $accident; ?>;
+    var parking = <?php echo $parking; ?>;
+    var sticker = <?php echo $sticker; ?>;
+    var helmet = <?php echo $helmet; ?>;
+    var data = google.visualization.arrayToDataTable([
+    ['Violation', 'Total'],
+    ['Cause Accident', accident],
+    ['Parking Violation', parking],
+    ['No Sticker Display', sticker],
+    ['Not Wearing Seat Belt or Helmet', helmet]
+  ]);
+
+    // Optional; add a title and set the width and height of the chart
+    var options = {'title':'Total Violation Traffic', 'width':550, 'height':400};
+
+    // Display the chart inside the <div> element with id="piechart"
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    chart.draw(data, options);
+  }
+  </script>
 
 </body>
 

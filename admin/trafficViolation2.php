@@ -8,15 +8,19 @@ $_SESSION["username"];
 
 $result=mysqli_query($conn,"SELECT count(*) as total from trafficviolation WHERE penaltyID = '1'");
 $data=mysqli_fetch_assoc($result);
+$accident = $data['total'];
 
 $result=mysqli_query($conn,"SELECT count(*) as total from trafficviolation WHERE penaltyID = '2'");
 $data=mysqli_fetch_assoc($result);
+$parking = $data['total'];
 
 $result=mysqli_query($conn,"SELECT count(*) as total from trafficviolation WHERE penaltyID = '3'");
 $data=mysqli_fetch_assoc($result);
+$sticker = $data['total'];
 
 $result=mysqli_query($conn,"SELECT count(*) as total from trafficviolation WHERE penaltyID = '4'");
 $data=mysqli_fetch_assoc($result);
+$helmet = $data['total'];
 
 $query = "SELECT * FROM penalty";
 $result = mysqli_query($conn,$query);
@@ -238,7 +242,8 @@ $result = mysqli_query($conn,$query);
         </tbody>
       </table>
     </form>
-   
+    <div id="piechart"></div>
+
     </div>
     <!-- End of Content Wrapper -->
 
@@ -292,6 +297,38 @@ $result = mysqli_query($conn,$query);
   <script type="text/javascript" src="../QrScan/js/qrcodelib.js"></script>
   <script type="text/javascript" src="../QrScan/js/webcodecamjs.js"></script>
   <script type="text/javascript" src="../QrScan/js/main.js"></script>
+
+
+<!-- Pie Chart Script -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <script type="text/javascript">
+  // Load google charts
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+
+  // Draw the chart and set the chart values
+  function drawChart() {
+    var accident = <?php echo $accident; ?>;
+      var parking = <?php echo $parking; ?>;
+      var sticker = <?php echo $sticker; ?>;
+      var helmet = <?php echo $helmet; ?>;
+      var data = google.visualization.arrayToDataTable([
+      ['Violation', 'Total'],
+      ['Cause Accident', accident],
+      ['Parking Violation', parking],
+      ['No Sticker Display', sticker],
+      ['Not Wearing Seat Belt or Helmet', helmet]
+  ]);
+
+    // Optional; add a title and set the width and height of the chart
+    var options = {'title':'My Average Day', 'width':550, 'height':400};
+
+    // Display the chart inside the <div> element with id="piechart"
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    chart.draw(data, options);
+  }
+  </script>
 
 </body>
 
